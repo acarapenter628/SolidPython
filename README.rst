@@ -1,3 +1,39 @@
+
+General Info
+------------
+
+This is a fork of SolidPython where I intend to add some additinal features to make it a bit easier to use.  I expect these additions to work in the most common cases, but there's probably no way to make them work in every edge case, so I'll probably never send a pull request for the One True Software.
+
+Planned features:
+
+* Each 3D object gets some included variables built in
+   * Included variables:
+      * ``x_pos``, ``y_pos``, ``z_pos``
+         * Useful for offsetting objects relative to other objects without having to keep track of everything manually
+      * ``height``, ``width``, ``depth``
+         * Useful for offsetting objects relative to other objects without having to keep track of everything manually
+         * This will almost certainly not work cleanly if you rotate an object by an amount that's not divisible by 90 degrees.  Probably a "don't do that" scenario, honestly
+         * For cylinders, both ``width`` and ``depth`` will be the diameter
+         * Probably not planning to update these in the ``resize`` or ``scale`` functions.  Just make a new object the size that you want.
+   * I think all the benefits of this can be acheived with the ``traits`` dictionary in the existing SolidPython, but that seems very manual and tedious
+* Function to center an object around the Z axis and align the bottom of it with the XY plane
+   * SolidPython objects can be centered around the origin when created.  This would be easier to work with if it only centered horizontally
+   * To use this, you'll probably create it centered and then call this function immediately after.  Behavior is undefined if you move or rotate it first.
+* New examples of things I've modeled/printed using these functions and features
+   * Examples:
+      * Remote holder for Sony DSX-A415BT stereo
+         * Maybe.  I have already printed the remote holder using the default SolidPython, and difficulties I had with that inspired this fork.  I may remake it with the improved features after they're implemented.
+      * Hatchback keyhole cover for 2nd Generation Chevy Astro 
+         * Maybe.  This was originally modeled with FreeCAD so I don't have existing code
+      * Whatever else I need that gives me an end-goal to actually making these changes
+         * Whatever this is, it will definitely be included as an example
+
+Full text of the original SolidPython readme is included below
+
+----
+
+
+
 SolidPython
 -----------
 
