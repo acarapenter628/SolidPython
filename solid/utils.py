@@ -167,6 +167,23 @@ def forward(y: float) -> OpenSCADObject:
 
 def back(y: float) -> OpenSCADObject:
     return translate((0, -y, 0))
+    
+
+def uncenter_vertical(base_object: OpenSCADObject) -> OpenSCADObject:
+    """
+    A helper function to reposition centered cube objects so that the center of the bottom face is on the origin.
+    This is similar to how uncentered cylinders are positioned.
+    base_object should be a cube created with center = True and not moved after creation
+    Behavior is undefined if any other type of object is passed in.  Some undefined behavior (uncentered cubes/cylinders) will be worse than others (spheres, centered cylinders)
+    ABC TODO:  This function seemed very helpful when I imagined it, but now I'm not sure.  We'll see how usefull it is by making some examples.
+        I think it will either prove worthless and I'll remove it, or I'll decide I need uncenter_x and uncenter_y functions
+            Or alternatively, make these center_x/y/z functions and pass in uncentered objects
+    """
+    # We want to translate the base_object upwards by half its height, and then adjust its z_position back to zero
+    translated = translate((0, 0, base_object.height/2))(base_object)
+    translated.z_pos -= base_object.height/2 # This will make undefined behavior generally less bad than if I just set it to zero
+    return translated
+    
 
 # ===========================
 # = Box-alignment rotations =

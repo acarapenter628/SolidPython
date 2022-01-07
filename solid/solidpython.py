@@ -53,6 +53,45 @@ class OpenSCADObject:
         self.has_hole_children = False
         self.is_part_root = False
         self.traits: Dict[str, Dict[str, float]] = {}
+        self.x_pos = 0.0
+        self.y_pos = 0.0
+        self.z_pos = 0.0
+        self.height = 0.0
+        self.width = 0.0
+        self.depth = 0.0
+        
+        self.print_name = self.name
+        
+        # Record Size
+        if "size" in params.keys() and name == "cube":
+            # x, y, z, - width, depth, height
+            self.width = params["size"][0]
+            self.depth = params["size"][1]
+            self.height = params["size"][2]
+        if "h" in params.keys():
+            self.height = params['h']
+        if "r" in params.keys():
+            self.width = 2*params['r']
+            self.depth = 2*params['r']
+            if (name == "sphere"):
+                self.height = 2*params['r']
+        elif "r1" in params.keys():  # Prioritize r1 over r2
+            self.depth = 2*params['r1']
+            self.width = 2*params['r1']
+        elif "r2" in params.keys():
+            self.depth = 2*params['r2']
+            self.width = 2*params['r2']
+        elif "d" in params.keys():
+            self.width = params['d']
+            self.depth = params['d']
+            if (name == "sphere"):
+                self.height = params['d']
+        elif "d1" in params.keys():  # Prioritize d1 over d2
+            self.depth = params['d1']
+            self.width = params['d1']
+        elif "d2" in params.keys():
+            self.depth = params['d2']
+            self.width = params['d2']
 
     def add_trait(self, trait_name:str, trait_data:Dict[str, float]):
         self.traits[trait_name] = trait_data
@@ -258,6 +297,15 @@ class OpenSCADObject:
         else:
             self.children.append(child)  # type: ignore
             child.set_parent(self)  # type: ignore
+            
+        # Take the position and size of the first child
+        self.x_pos = self.children[0].x_pos
+        self.y_pos = self.children[0].y_pos
+        self.z_pos = self.children[0].z_pos
+        self.height = self.children[0].height
+        self.width = self.children[0].width
+        self.depth = self.children[0].depth
+        
         return self
 
     def set_parent(self, parent: "OpenSCADObject"):
@@ -359,6 +407,12 @@ class OpenSCADObject:
             os.unlink(tmp_png.name)
 
         return png_data
+        
+    def __str__(self) -> str:
+        """
+        Print name, position, and size of an object
+        """
+        return f"Name: {self.print_name} | Position: {self.x_pos}, {self.y_pos}, {self.z_pos} | Size: {self.width}, {self.depth}, {self.height}"
 
 
 class IncludedOpenSCADObject(OpenSCADObject):

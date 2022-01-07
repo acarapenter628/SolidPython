@@ -301,7 +301,19 @@ class translate(OpenSCADObject):
 
     def __init__(self, v: P3 = None) -> None:
         super().__init__('translate', {'v': v})
-
+        
+    def __call__(self, *args: "OpenSCADObject") -> "OpenSCADObject":
+        super().__call__(*args)
+        
+        # Update position
+        position = self.params["v"]
+        self.x_pos += position[0]
+        self.y_pos += position[1]
+        self.z_pos += position[2]
+        
+        # For translations, take the name of the object we're translating
+        self.print_name = self.children[0].print_name
+        return self
 
 class scale(OpenSCADObject):
     """
@@ -330,6 +342,40 @@ class rotate(OpenSCADObject):
     def __init__(self, a: Union[float, Vec3] = None, v: Vec3 = None) -> None:
         super().__init__('rotate', {'a': a, 'v': v})
 
+    def __call__(self, *args: "OpenSCADObject") -> "OpenSCADObject":
+        super().__call__(*args)
+        
+        # Update height/width/depth
+        # We only care about this if we're here from a `rotate_[axis]_to_[direction]` function
+        if self.params['v'] == ( 0, 1, 0): # FORWARD_VEC
+            if self.params['a'] == 0: # Z Up
+                # Do nothing
+                pass
+            if self.params['a'] == 90: # Z Right
+                temp = self.height
+                self.height = -self.width
+                self.width = temp
+            if self.params['a'] == -90: # Z Left
+                temp = self.height
+                self.height = self.width
+                self.width = -temp
+            if self.params['a'] == 180: # Z Down
+                self.height = -self.height
+                self.width = -self.width
+        elif self.params['v'] == ( 1, 0, 0): # RIGHT_VEC
+            if self.params['a'] == 90: # Z Back
+                temp = self.height
+                self.height = self.depth
+                self.depth = -temp
+                pass
+            if self.params['a'] == -90: # Z Forward
+                temp = self.height
+                self.height = -self.depth
+                self.depth = temp
+        
+        # For rotations, take the name of the object we're rotating
+        self.print_name = self.children[0].print_name
+        return self
 
 class mirror(OpenSCADObject):
     """
