@@ -59,6 +59,12 @@ class OpenSCADObject:
         self.height = 0.0
         self.width = 0.0
         self.depth = 0.0
+        self.r = 0.0
+        self.r1 = 0.0
+        self.r2 = 0.0
+        self.d = 0.0
+        self.d1 = 0.0
+        self.d2 = 0.0
         
         self.print_name = self.name
         
@@ -70,28 +76,81 @@ class OpenSCADObject:
             self.height = params["size"][2]
         if "h" in params.keys():
             self.height = params['h']
-        if "r" in params.keys():
+        if "r" in params.keys() and params['r'] is not None:
             self.width = 2*params['r']
             self.depth = 2*params['r']
+            self.r = params['r']
+            self.r1 = self.r
+            self.r2 = self.r
+            self.d = 2*self.r
+            self.d1 = self.d
+            self.d2 = self.d
             if (name == "sphere"):
                 self.height = 2*params['r']
-        elif "r1" in params.keys():  # Prioritize r1 over r2
-            self.depth = 2*params['r1']
-            self.width = 2*params['r1']
-        elif "r2" in params.keys():
-            self.depth = 2*params['r2']
-            self.width = 2*params['r2']
-        elif "d" in params.keys():
+            # If we have both 'r' and 'r1' or 'r2', OpenSCAD will still render it with a warning, so we'll keep track
+            
+            if "r1" in params.keys() and params['r1'] is not None:
+                self.r1 = params['r1']
+            if "r2" in params.keys() and params['r2'] is not None:
+                self.r2 = params['r2']
+        else:
+            if "r2" in params.keys() and params['r2'] is not None:
+                self.depth = 2*params['r2']
+                self.width = 2*params['r2']
+                self.r2 = params['r2']
+                self.d2 = 2*self.r2
+                self.r = self.r2
+                self.d = self.d2
+            if "r1" in params.keys() and params['r1'] is not None:  # Prioritize r1 over r2 for width/depth/radius/diameter
+                self.depth = 2*params['r1']
+                self.width = 2*params['r1']
+                self.r1 = params['r1']
+                self.d1 = 2*self.r1
+                self.r = self.r1
+                self.d = self.d1
+            # Cleanup if they pass in only r1 or r2
+            if (self.r1 == 0):
+                self.r1 = 1
+            if (self.r2 == 0):
+                self.r2 = 1
+
+        if "d" in params.keys() and params['d'] is not None:
             self.width = params['d']
             self.depth = params['d']
+            self.d = params['d']
+            self.d1 = self.d
+            self.d2 = self.d
+            self.r = self.d/2
+            self.r1 = self.r
+            self.r2 = self.r
+            
             if (name == "sphere"):
                 self.height = params['d']
-        elif "d1" in params.keys():  # Prioritize d1 over d2
-            self.depth = params['d1']
-            self.width = params['d1']
-        elif "d2" in params.keys():
-            self.depth = params['d2']
-            self.width = params['d2']
+            # If we have both 'd' and 'd1' or 'd2', OpenSCAD will still render it with a warning, so we'll keep track 
+            if "d1" in params.keys() and params['d1'] is not None:
+                self.d1 = params['d1']
+            if "d2" in params.keys() and params['d2'] is not None:
+                self.d2 = params['d2']
+        else:
+            if "d2" in params.keys() and params['d2'] is not None:
+                self.depth = params['d2']
+                self.width = params['d2']
+                self.d2 = params['d2']
+                self.r2 = self.d2/2
+                self.d = self.d2
+                self.r = self.r2
+            if "d1" in params.keys() and params['d1'] is not None:  # Prioritize d1 over d2 for width/depth/radius/diameter
+                self.depth = params['d1']
+                self.width = params['d1']
+                self.d1 = params['d1']
+                self.r1 = self.d1/2
+                self.d = self.d1
+                self.r = self.r1
+            # Cleanup if they pass in only d1 or d2
+            if (self.d1 == 0):
+                self.d1 = 1
+            if (self.d2 == 0):
+                self.d2 = 1
 
     def add_trait(self, trait_name:str, trait_data:Dict[str, float]):
         self.traits[trait_name] = trait_data
@@ -305,6 +364,12 @@ class OpenSCADObject:
         self.height = self.children[0].height
         self.width = self.children[0].width
         self.depth = self.children[0].depth
+        self.d = self.children[0].d
+        self.d1 = self.children[0].d1
+        self.d2 = self.children[0].d2
+        self.r = self.children[0].r
+        self.r1 = self.children[0].r1
+        self.r2 = self.children[0].r2
         
         return self
 
@@ -412,7 +477,15 @@ class OpenSCADObject:
         """
         Print name, position, and size of an object
         """
-        return f"Name: {self.print_name} | Position: {self.x_pos}, {self.y_pos}, {self.z_pos} | Size: {self.width}, {self.depth}, {self.height}"
+        printString = ""
+        if (self.d == 0):
+            printString = f"{self.print_name} | Position: X {self.x_pos}, Y {self.y_pos}, Z {self.z_pos} | Size: X {self.width}, Y {self.depth}, Z {self.height}"
+        else:
+            if (self.d1 == self.d2):
+                printString = f"{self.print_name} | Position: X {self.x_pos}, Y {self.y_pos}, Z {self.z_pos} | Size: X {self.width}, Y {self.depth}, Z {self.height}, D {self.d}"
+            else:
+                printString = f"{self.print_name} | Position: X {self.x_pos}, Y {self.y_pos}, Z {self.z_pos} | Size: X {self.width}, Y {self.depth}, Z {self.height}, D1 {self.d1}, D2 {self.d2}"
+        return printString
 
 
 class IncludedOpenSCADObject(OpenSCADObject):
