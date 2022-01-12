@@ -2,9 +2,9 @@
 General Info
 ------------
 
-This is a fork of SolidPython where I intend to add some additional features to make it a bit easier to use.  I expect these additions to work in the most common cases, but there's probably no way to make them work in every edge case, so I'll probably never send a pull request for the One True Software.
+This is a fork of SolidPython with some quality of life improvements.  These additions will work in the most common cases, but there's probably no way to make them work in every edge case, so I'll probably never send a pull request for the One True Software.
 
-Planned features:
+Features:
 
 * Each 3D object gets some included variables built in
    * Included variables:
@@ -25,6 +25,7 @@ Planned features:
    * Examples:
       * Remote holder for Sony DSX-A415BT stereo // Done
       * Hatchback keyhole cover for 2nd Generation Chevy Astro  // Done
+      * Updated template with more helpful 'getting started' info // Done
 
 
 **Installation**
