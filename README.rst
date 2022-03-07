@@ -15,7 +15,7 @@ Features:
          * This will almost certainly not work cleanly if you rotate an object by an amount that's not divisible by 90 degrees.  Probably a "don't do that" scenario, honestly
          * For cylinders, both ``width`` and ``depth`` will be the diameter
          * Probably not planning to update these in the ``resize`` or ``scale`` functions.  Just make a new object the size that you want.
-      *  ``d, d1, d2, r, r1, r2`` for circular objects // Done
+      *  ``d``, ``d1``, ``d2``, ``r``, ``r1``, ``r2`` for circular objects // Done
    * I think all the benefits of this can be achieved with the ``traits`` dictionary in the existing SolidPython, but that seems very manual and tedious
 * Function to center an object around the Z axis and align the bottom of it with the XY plane // Done
    * SolidPython objects can be centered around the origin when created.  This would be easier to work with if it only centered horizontally
@@ -30,7 +30,7 @@ Features:
 
 **Installation**
 
-Install the real SolidPython using pip, and then copy the ``solid`` folder from this fork over the real installation.  For me, the location defaulted to ``C:\Users\[username]\AppData\Local\Programs\Python\Python39\Lib\site-packages\solid``
+Install the real SolidPython using pip, and then copy the ``solid`` folder from this fork over the real installation.  For me, the location defaulted to ``C:\Users\[username]\AppData\Local\Programs\Python\Python39\Lib\site-packages\solid``.  There is probably an easier way to do this that I'm not aware of.  I've heard rumors of using pip to install packages directly from GitHub, but I've never gotten it to work
 
 Full text of the original SolidPython readme is included below
 
