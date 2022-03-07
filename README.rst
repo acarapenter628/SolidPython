@@ -30,7 +30,7 @@ Features:
 
 **Installation**
 
-Install the real SolidPython using pip, and then copy the ``solid`` folder from this fork over the real installation.  For me, the location defaulted to ``C:\Users\[username]\AppData\Local\Programs\Python\Python39\Lib\site-packages\solid``
+Install the real SolidPython using pip, and then copy the ``solid`` folder from this fork over the real installation.  For me, the location defaulted to ``C:\Users\[username]\AppData\Local\Programs\Python\Python39\Lib\site-packages\solid``.  There is probably an easier way to do this that I'm not aware of.  I've heard rumors of using pip to install packages directly from GitHub, but I've never gotten it to work
 
 Full text of the original SolidPython readme is included below
 
