@@ -4,12 +4,13 @@ import sys
 from solid import *
 from solid.utils import *
 
-SEGMENTS = 48
+SEGMENTS = 256
 
-# Must be false if this uses circles or arcs and will be exported to FreeCAD
+# Should be False if this uses circles or arcs and will be exported to FreeCAD
 # True or False can be used for testing
+# Should be True if it will be exported as an STL directly from OpenSCAD
 # This changes the number of segments used to create circles in the OpenSCAD renderer
-USE_NUM_SEGMENTS = False
+USE_NUM_SEGMENTS = True
 
 
 ################
@@ -64,8 +65,13 @@ def basic_geometry():
     volume_sqr = cube([13, 3, 19], center = True)  # Create a cube
     volume_sqr = uncenter_vertical(volume_sqr)  # Align the bottom with the XY Plane
     print(volume_sqr)  # Print info about it
+    
+    volume_cyl = cylinder(d = 13, h = 10, center = True) # Create a cylinder
+    volume_cyl = rot_z_to_back(volume_cyl) # Rotate
+    volume_cyl = up(volume_sqr.height)(volume_cyl) # Shift up
+    print(volume_cyl)  # Print info about it
 
-    return volume_sqr
+    return volume_sqr + volume_cyl # Add them together
 
 
 if __name__ == '__main__':

@@ -353,24 +353,24 @@ class rotate(OpenSCADObject):
                 pass
             if self.params['a'] == 90: # Z Right
                 temp = self.height
-                self.height = -self.width
+                self.height = self.width
                 self.width = temp
             if self.params['a'] == -90: # Z Left
                 temp = self.height
                 self.height = self.width
-                self.width = -temp
+                self.width = temp
             if self.params['a'] == 180: # Z Down
-                self.height = -self.height
-                self.width = -self.width
+                self.height = self.height
+                self.width = self.width
         elif self.params['v'] == ( 1, 0, 0): # RIGHT_VEC
             if self.params['a'] == 90: # Z Back
                 temp = self.height
                 self.height = self.depth
-                self.depth = -temp
+                self.depth = temp
                 pass
             if self.params['a'] == -90: # Z Forward
                 temp = self.height
-                self.height = -self.depth
+                self.height = self.depth
                 self.depth = temp
         
         # For rotations, take the name of the object we're rotating
