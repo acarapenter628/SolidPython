@@ -19,7 +19,8 @@ Features:
    * I think all the benefits of this can be achieved with the ``traits`` dictionary in the existing SolidPython, but that seems very manual and tedious
 * Function to center an object around the Z axis and align the bottom of it with the XY plane // Done
    * SolidPython objects can be centered around the origin when created.  This would be easier to work with if it only centered horizontally
-   * To use this, you'll probably create it centered and then call this function immediately after.  Behavior is undefined if you move or rotate it first.
+   * To use this, you'll create it centered and then call this function immediately after.  Behavior is undefined if you move or rotate it first.
+      * See `remote_holder.py` for a usage example
 * ``__str__`` function // Done
 * New examples of things I've modeled/printed using these functions and features
    * Examples:
