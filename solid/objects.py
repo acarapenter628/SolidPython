@@ -308,8 +308,10 @@ class translate(OpenSCADObject):
         # Update position
         position = self.params["v"]
         self.x_pos += position[0]
-        self.y_pos += position[1]
-        self.z_pos += position[2]
+        if len(position) > 1:
+            self.y_pos += position[1]
+        if len(position) > 2:
+            self.z_pos += position[2]
         
         # For translations, take the name of the object we're translating
         self.print_name = self.children[0].print_name
